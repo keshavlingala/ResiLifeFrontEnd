@@ -1,0 +1,45 @@
+<div class="login-wrapper">
+  <div class="header">
+    <img src="https://picsum.photos/seed/login/300/300" alt="">
+  </div>
+  <div *ngIf="isLoginScreen" class="form" [formGroup]="loginForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input formControlName="email" matInput placeholder="Email">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input formControlName="password" #password matInput placeholder="Password" type="password">
+      <mat-icon (click)="toggleVisibility(password)"
+                matSuffix>{{password.type == 'password' ? "visibility_off" : "visibility"}}</mat-icon>
+    </mat-form-field>
+    <button (click)="login()" mat-raised-button color="primary">Login</button>
+    <button (click)="isLoginScreen=false" mat-raised-button color="accent">Register</button>
+  </div>
+
+  <div *ngIf="!isLoginScreen" class="form" [formGroup]="registerForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input formControlName="email"  matInput placeholder="Email">
+      <mat-error>Must not be Empty</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fist Name</mat-label>
+      <input formControlName="firstName"  matInput placeholder="First Name">
+      <mat-error>Must not be Empty</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input formControlName="lastName"  matInput placeholder="Last Name">
+      <mat-error>Must not be Empty</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input formControlName="password" #password2 matInput placeholder="Password" type="password">
+      <mat-icon (click)="toggleVisibility(password2)"
+                matSuffix>{{password2.type == 'password' ? "visibility_off" : "visibility"}}</mat-icon>
+    </mat-form-field>
+    <button (click)="register()" mat-raised-button color="primary">Register</button>
+    <button (click)="isLoginScreen=true" mat-raised-button color="accent">Login</button>
+  </div>
+</div>
