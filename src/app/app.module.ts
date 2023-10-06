@@ -1,18 +1,66 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatButtonModule} from "@angular/material/button";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {HomeComponent} from './components/home/home.component';
+import {ExpensesComponent} from './components/expenses/expenses.component';
+import {AssigmentsComponent} from './components/assigments/assigments.component';
+import {CalendarComponent} from './components/calendar/calendar.component';
+import {NotesComponent} from './components/notes/notes.component';
+import {EventsComponent} from './components/events/events.component';
+import {LoginComponent} from './components/login/login.component';
+import {MatMenuModule} from "@angular/material/menu";
+import {SettingsComponent} from './components/settings/settings.component';
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
+import {BackendService} from "./services/backend.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {JwtInterceptor} from "./misc/JwtInterceptor";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatListModule} from "@angular/material/list";
+import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    ExpensesComponent,
+    AssigmentsComponent,
+    CalendarComponent,
+    NotesComponent,
+    EventsComponent,
+    LoginComponent,
+    SettingsComponent,
+    JoinDialogComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatListModule
   ],
-  providers: [],
+  providers: [
+    BackendService,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
