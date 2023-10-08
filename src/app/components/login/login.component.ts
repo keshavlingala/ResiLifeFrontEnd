@@ -50,7 +50,7 @@ export class LoginComponent {
 
   register() {
     const {email, password, firstName, lastName} = this.registerForm.value;
-    this.backend.register(email, password, firstName, lastName).subscribe(res => {
+    this.backend.register(email, password, firstName, lastName).subscribe(_ => {
       this.snack.open('Registered', 'OK', {duration: 3000});
     })
   }
