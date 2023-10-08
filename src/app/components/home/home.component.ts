@@ -8,11 +8,7 @@ import {BackendService} from "../../services/backend.service";
 })
 export class HomeComponent {
   constructor(
-    private backendService: BackendService,
+    public backendService: BackendService,
   ) {
-    backendService.fetchUserData()
-      .subscribe((data) => {
-        console.log(data);
-      })
   }
 }

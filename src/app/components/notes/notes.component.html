@@ -1,1 +1,15 @@
-<p>notes works!</p>
+<div class="container">
+  <div class="form" [formGroup]="noteGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>Add Title</mat-label>
+      <input formControlName="title" matInput placeholder="Add a Note">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Add Note</mat-label>
+      <textarea formControlName="content" #note matInput placeholder="Add a Note"></textarea>
+    </mat-form-field>
+  </div>
+  <button (click)="saveNote()" mat-flat-button color="primary">Save Note</button>
+
+  <pre>{{backendService.groupData | json}}</pre>
+</div>

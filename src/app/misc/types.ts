@@ -2,8 +2,13 @@ export interface UserData {
   email: string;
   firstName: string;
   lastName: string;
-  meta: any;
+  meta?: Meta;
   apartmentId?: string;
+}
+
+export interface Meta {
+  splitwiseApiKey?: string;
+  canvasApiKey?: string;
 }
 
 export interface Apartment {
@@ -11,6 +16,17 @@ export interface Apartment {
   name: string;
   picture?: string;
   members: string[];
-  payload:any;
-  createDate: Date;
+  payload: Payload;
+  createDate: string;
+}
+
+export interface Payload {
+  owner: string;
+  notes: Note[];
+}
+
+export interface Note {
+  title: string;
+  content: string;
+  author: string;
 }

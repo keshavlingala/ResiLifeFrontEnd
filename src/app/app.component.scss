@@ -1,0 +1,23 @@
+.connection-box {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+
+  span {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .connected {
+    color: green;
+  }
+
+  .disconnected {
+    color: red;
+  }
+
+}

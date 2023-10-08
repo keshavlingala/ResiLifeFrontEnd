@@ -26,6 +26,7 @@ import {JwtInterceptor} from "./misc/JwtInterceptor";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatListModule} from "@angular/material/list";
 import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
     HttpClientModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatChipsModule
   ],
   providers: [
     BackendService,

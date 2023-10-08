@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {BackendService} from "../../services/backend.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'join-dialog',
@@ -21,8 +22,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
       <div class="column">
         <mat-form-field appearance="outline">
           <mat-label>Join Apartment</mat-label>
-          <input matInput placeholder="Apartment Code">
+          <input #code matInput placeholder="Apartment Code">
         </mat-form-field>
+        <button mat-flat-button (click)="joinApartment(code.value)">Join Apartment</button>
       </div>
     </div>
   `
@@ -33,6 +35,7 @@ export class JoinDialogComponent {
   constructor(
     private backendService: BackendService,
     private snack: MatSnackBar,
+    public dialogRef: MatDialogRef<JoinDialogComponent>
   ) {
   }
 
@@ -41,8 +44,26 @@ export class JoinDialogComponent {
       this.snack.open('Apartment name cannot be empty', 'Close', {duration: 3000})
       return
     }
-    this.backendService.createApartment(value).subscribe(res => {
-      console.log(res)
-    })
+    this.backendService
+      .createApartment(value)
+      .subscribe(res => {
+        console.log(res)
+        this.snack.open('Apartment created', 'Close', {duration: 3000})
+        this.dialogRef.close()
+      })
+  }
+
+  joinApartment(value: string) {
+    if (value === '') {
+      this.snack.open('Apartment code cannot be empty', 'Close', {duration: 3000})
+      return
+    }
+    this.backendService
+      .joinApartment(value)
+      .subscribe(res => {
+        console.log(res)
+        this.snack.open('Apartment joined', 'Close', {duration: 3000})
+        this.dialogRef.close()
+      })
   }
 }

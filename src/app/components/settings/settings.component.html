@@ -1,1 +1,26 @@
-<p>settings works!</p>
+<div class="div">
+  <h2>Update Info</h2>
+  <div class="form" [formGroup]="userInfoGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input formControlName="firstName"  type="text" matInput placeholder="Name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input formControlName="lastName" type="text" matInput placeholder="Last Name">
+    </mat-form-field>
+    <button (click)="updateInfo()" mat-flat-button color="accent">Save Info</button>
+  </div>
+  <h2>Update API Keys</h2>
+  <div class="form" [formGroup]="keysGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter SplitWise Api Key</mat-label>
+      <input formControlName="splitwiseApiKey" type="text" matInput placeholder="n1*Z3S******">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Canvas API Key</mat-label>
+      <input formControlName="canvasApiKey" type="text" matInput placeholder="****Z3***oVR******">
+    </mat-form-field>
+    <button (click)="updateKeys()"mat-flat-button color="accent">Save Keys</button>
+  </div>
+</div>
