@@ -27,6 +27,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatListModule} from "@angular/material/list";
 import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
 import {MatChipsModule} from "@angular/material/chips";
+import {MatCardModule} from "@angular/material/card";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -41,23 +43,25 @@ import {MatChipsModule} from "@angular/material/chips";
     SettingsComponent,
     JoinDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatMenuModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatListModule,
-    MatChipsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatMenuModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatListModule,
+        MatChipsModule,
+        MatCardModule,
+        MatTooltipModule
+    ],
   providers: [
     BackendService,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

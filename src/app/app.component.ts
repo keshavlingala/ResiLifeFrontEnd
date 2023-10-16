@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {BackendService} from "./services/backend.service";
 import {MatDialog} from "@angular/material/dialog";
 import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
@@ -6,7 +6,7 @@ import {JoinDialogComponent} from "./components/dialogs/join-dialog.component";
 @Component({
   selector: 'app-root', templateUrl: './app.component.html', styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'HomeManagement';
 
   constructor(
@@ -25,6 +25,12 @@ export class AppComponent {
     }).afterClosed().subscribe(res => {
       console.log(res)
     })
+  }
+
+  ngAfterViewInit(): void {
+    if (this.backendService.isLoggedIn && !this.backendService.isConnected) {
+      this.backendService.connect()
+    }
   }
 }
 

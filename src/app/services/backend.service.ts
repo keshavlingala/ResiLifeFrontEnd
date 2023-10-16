@@ -23,8 +23,8 @@ export class BackendService {
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   userData: UserData = JSON.parse(localStorage.getItem('userData') || '{}');
   groupData: Apartment = JSON.parse(localStorage.getItem('apartment') || '{}');
-  socketUser!: WebSocketSubject<UserData>;
-  socketGroup!: WebSocketSubject<Apartment>;
+  socketUser!: WebSocketSubject<{ type: string, data: UserData }>;
+  socketGroup!: WebSocketSubject<{ type: string, data: Apartment }>;
   isConnected = false;
 
   constructor(
@@ -118,7 +118,7 @@ export class BackendService {
   }
 
   connect() {
-    this.socketUser = webSocket<UserData>({
+    this.socketUser = webSocket({
       url: USER_SOCKET_URL + "?token=" + this.token,
       openObserver: {
         next: () => {
@@ -134,7 +134,7 @@ export class BackendService {
       }
     });
 
-    this.socketGroup = webSocket<Apartment>({
+    this.socketGroup = webSocket({
       url: GROUP_SOCKET_URL + "?token=" + this.token,
       openObserver: {
         next: () => {
@@ -154,7 +154,7 @@ export class BackendService {
     this.socketUser.subscribe({
       next: res => {
         console.log("User socket", res)
-        this.userData = res
+        this.userData = res.data
         localStorage.setItem('userData', JSON.stringify(res));
       },
       error: err => {
@@ -166,7 +166,7 @@ export class BackendService {
     this.socketGroup.subscribe({
       next: res => {
         console.log("Group socket", res)
-        this.groupData = res
+        this.groupData = res.data
         localStorage.setItem('apartment', JSON.stringify(res));
       },
       error: err => {
@@ -209,15 +209,25 @@ export class BackendService {
   }
 
   saveNoteToApartment(note: Note) {
+    if (!this.isConnected) {
+      this.snack.open('You must be Online', 'OK', {duration: 3000});
+      return
+    }
     if (!this.groupData.payload.notes) {
       this.groupData.payload.notes = []
     }
     this.groupData.payload.notes.push(note)
-    this.socketGroup.next(this.groupData)
+    this.socketGroup.next({
+      type: "update",
+      data: this.groupData
+    })
   }
 
   private sendToUserSocket(user: UserData) {
-    this.socketUser.next(user)
+    this.socketUser.next({
+      type: "update",
+      data: user
+    })
   }
 
   private localSetup(token: string,

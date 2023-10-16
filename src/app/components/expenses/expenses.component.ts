@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {BackendService} from "../../services/backend.service";
 
 @Component({
   selector: 'app-expenses',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class ExpensesComponent {
 
+  constructor(
+    public backend: BackendService,
+  ) {
+  }
+
+  ngOnInit() {
+  }
 }

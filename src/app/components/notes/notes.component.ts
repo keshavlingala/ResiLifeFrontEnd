@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {BackendService} from "../../services/backend.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Note} from "../../misc/types";
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-notes',
@@ -22,6 +23,7 @@ export class NotesComponent {
   saveNote() {
 
     let note: Note = {
+      id: uuidv4(),
       title: this.noteGroup.value.title!!,
       content: this.noteGroup.value.content!!,
       author: this.backendService.userData?.email!!,
