@@ -13,6 +13,8 @@ export class AppComponent implements AfterViewInit {
     public backendService: BackendService,
     private dialog: MatDialog
   ) {
+    // @ts-ignore
+    window.app = this
   }
 
   logout() {

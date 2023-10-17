@@ -1,9 +1,57 @@
-<div class="container">
-  <div class="user-info">
-    <pre>{{backendService.userData | json}}</pre>
-    <pre>{{backendService.groupData | json}}</pre>
+<div class="container d-flex flex-row flex-wrap w-100 p-3">
+  <div class="profile d-flex flex-column align-items-center gap-3 text-center w-50">
+    <img [src]="backendService.userData.meta?.picture
+        || getDummyPic(backendService.userData.email,300)"
+         alt=""
+         class="w-50">
+    <b>{{backendService.userData.firstName}} {{backendService.userData.lastName}}</b>
+    <div class="d-flex flex-row gap-3">
+      <mat-checkbox (click)="route('settings')" [checked]="!!backendService.userData.meta?.splitwiseApiKey"
+                    routerLink="settings">
+        <img alt="Splitwise Key"
+             class="image-icon"
+             matTooltip="Splitwise Key Setup"
+             src="assets/images/splitwise.svg">
+      </mat-checkbox>
+      <mat-checkbox (click)="route('settings')" [checked]="!!backendService.userData.meta?.canvasApiKey">
+        <img alt="Canvas Key"
+             class="image-icon"
+             matTooltip="Canvas Key Setup"
+             src="assets/images/canvas.svg">
+      </mat-checkbox>
+    </div>
   </div>
-  <div class="roomates">
-
+  <div class="roomates d-flex flex-column gap-3 w-50 p-3">
+    <h4>Roomates</h4>
+    <div *ngFor="let member of backendService.groupData.payload.memberDetails">
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <img [src]="getDummyPic(member.email,40)" alt="">
+          </div>
+          <mat-card-title>{{member.name}}</mat-card-title>
+          <mat-card-subtitle>{{member.email}}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="roomates d-flex flex-column gap-3 w-50 p-3">
+    <h4>Expenses</h4>
+    <div *ngFor="let member of backendService.groupData.payload.memberDetails">
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <img [src]="getDummyPic(member.email,40)" alt="">
+          </div>
+          <mat-card-title>{{member.name}}</mat-card-title>
+          <mat-card-subtitle>
+            <span [ngClass]="{
+              'text-success': member?.balance||0 < 0,
+              'text-danger': member?.balance||0 > 0
+            }">{{member?.balance || 0 | currency:'USD'}}</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
   </div>
 </div>

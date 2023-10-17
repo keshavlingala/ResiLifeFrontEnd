@@ -9,6 +9,7 @@ export interface UserData {
 export interface Meta {
   splitwiseApiKey?: string;
   canvasApiKey?: string;
+  picture?: string;
 }
 
 export interface Apartment {
@@ -20,9 +21,18 @@ export interface Apartment {
   createDate: string;
 }
 
+export interface MemberDetails {
+  email: string;
+  name: string;
+  picture?: string;
+  balance?: number;
+}
+
 export interface Payload {
   owner: string;
   notes: Note[];
+  memberDetails?: MemberDetails[];
+  // expenses?: Expense[];
 }
 
 export interface Note {

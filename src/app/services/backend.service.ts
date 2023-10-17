@@ -118,6 +118,8 @@ export class BackendService {
   }
 
   connect() {
+
+    // Web Socket Connections
     this.socketUser = webSocket({
       url: USER_SOCKET_URL + "?token=" + this.token,
       openObserver: {
@@ -150,30 +152,19 @@ export class BackendService {
       }
     });
 
-
+    // Web Socket Subscriptions
     this.socketUser.subscribe({
       next: res => {
         console.log("User socket", res)
-        this.userData = res.data
-        localStorage.setItem('userData', JSON.stringify(res));
+        this.updateService(res.data, null)
       },
-      error: err => {
-        console.log("User socket error", err)
-        this.snack.open('You have been logged out', 'OK', {duration: 3000});
-        this.isConnected = false;
-      }
+      error: this.handleError.bind(this)
     })
     this.socketGroup.subscribe({
       next: res => {
-        console.log("Group socket", res)
-        this.groupData = res.data
-        localStorage.setItem('apartment', JSON.stringify(res));
+        this.updateService(null, res.data)
       },
-      error: err => {
-        console.log("Group socket error", err)
-        this.snack.open('You have been logged out', 'OK', {duration: 3000});
-        this.isConnected = false;
-      }
+      error: this.handleError.bind(this)
     })
   }
 
@@ -189,20 +180,20 @@ export class BackendService {
       splitwiseApiKey: splitwiseApiKey,
       canvasApiKey: canvasApiKey,
     }
-    this.sendToUserSocket(this.userData)
+    this.sendToUserSocket("update", this.userData)
   }
 
   updateInfo(firstName: string | undefined, lastName: string | undefined) {
     this.userData.firstName = firstName || this.userData.firstName
     this.userData.lastName = lastName || this.userData.lastName
-    this.sendToUserSocket(this.userData)
+    this.sendToUserSocket("update", this.userData)
+    this.updateService(this.userData, null)
   }
 
   joinApartment(value: string) {
     return this.http.get<Apartment>(APT_JOIN + "/" + value).pipe(
       map(res => {
-        this.groupData = res;
-        localStorage.setItem('apartment', JSON.stringify(res));
+        this.updateService(null, res)
         return res;
       })
     )
@@ -213,28 +204,57 @@ export class BackendService {
       this.snack.open('You must be Online', 'OK', {duration: 3000});
       return
     }
-    if (!this.groupData.payload.notes) {
-      this.groupData.payload.notes = []
+    let newNote = true;
+    this.groupData.payload.notes = this.groupData.payload.notes.map(n => {
+      if (n.id === note.id) {
+        newNote = false;
+        return note
+      }
+      return n
+    })
+    if (newNote) {
+      this.groupData.payload.notes.push(note)
     }
-    this.groupData.payload.notes.push(note)
     this.socketGroup.next({
       type: "update",
       data: this.groupData
     })
   }
 
-  private sendToUserSocket(user: UserData) {
-    this.socketUser.next({
+  deleteNoteFromApartment(note: Note) {
+    if (!this.isConnected) {
+      this.snack.open('You must be Online', 'OK', {duration: 3000});
+      return
+    }
+    this.groupData.payload.notes = this.groupData.payload.notes.filter(n => n.id !== note.id)
+    this.socketGroup.next({
       type: "update",
+      data: this.groupData
+    })
+  }
+
+  getMemberDetails() {
+    this.socketGroup.next({
+      type: "get-members",
+      data: this.groupData
+    })
+  }
+
+  private handleError(err: any) {
+    console.log("User socket error", err)
+    this.snack.open('You have been logged out', 'OK', {duration: 3000});
+    this.isConnected = false;
+  }
+
+  private sendToUserSocket(type: string, user: UserData) {
+    this.socketUser.next({
+      type,
       data: user
     })
   }
 
-  private localSetup(token: string,
-                     userData: UserData | null = null,
-                     groupData: Apartment | null = null) {
-    this.token = token;
-    localStorage.setItem('token', token);
+  private updateService(userData: UserData | null = null,
+                        groupData: Apartment | null = null) {
     if (userData) {
       this.userData = userData;
       localStorage.setItem('userData', JSON.stringify(userData));
@@ -243,8 +263,6 @@ export class BackendService {
       this.groupData = groupData;
       localStorage.setItem('apartment', JSON.stringify(groupData));
     }
-    this.loggedIn.next(true);
-    this.connect();
   }
 }
 
