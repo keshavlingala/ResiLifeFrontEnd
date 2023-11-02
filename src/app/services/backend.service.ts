@@ -4,16 +4,22 @@ import {
   APARTMENT_URL,
   APT_CREATE,
   APT_JOIN,
+  blue,
   GROUP_SOCKET_URL,
   LOGIN_URL,
+  red,
   REGISTER_URL,
   USER_DATA,
-  USER_SOCKET_URL
+  USER_SOCKET_URL,
+  yellow
 } from "../misc/constants";
 import {BehaviorSubject, map} from "rxjs";
 import {Apartment, Note, UserData} from "../misc/types";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
+import {addDays, addHours, endOfMonth, startOfDay, subDays} from "date-fns";
+import {CalendarEvent} from "angular-calendar";
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +32,48 @@ export class BackendService {
   socketUser!: WebSocketSubject<{ type: string, data: UserData }>;
   socketGroup!: WebSocketSubject<{ type: string, data: Apartment }>;
   isConnected = false;
+  events: CalendarEvent[] = [
+    {
+      start: subDays(startOfDay(new Date()), 1),
+      end: addDays(new Date(), 1),
+      title: 'A 3 day event',
+      color: {...(red)},
+      allDay: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+      draggable: true,
+    },
+    {
+      start: startOfDay(new Date()),
+      title: 'An event with no end date',
+      color: {...(yellow)},
+    },
+    {
+      start: subDays(endOfMonth(new Date()), 3),
+      end: addDays(endOfMonth(new Date()), 3),
+      title: 'A long event that spans 2 months',
+      color: {...(blue)},
+      allDay: true,
+    },
+    {
+      start: addHours(startOfDay(new Date()), 2),
+      end: addHours(new Date(), 2),
+      title: 'A draggable and resizable event',
+      color: {...(yellow)},
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+      draggable: true,
+    },
+  ]
 
   constructor(
     private http: HttpClient,
     private snack: MatSnackBar,
+    private router: Router,
   ) {
     if (this.token) {
       this.loggedIn.next(true);
@@ -38,10 +82,27 @@ export class BackendService {
       this.fetchUserData().subscribe(console.log)
       this.fetchApartmentData().subscribe(console.log)
     }
+    this.loggedIn.subscribe(loggedIn => {
+      if (!loggedIn) {
+        this.router.navigate(['/login'])
+      }
+    })
   }
 
   get isLoggedIn() {
     return this.loggedIn.value
+  }
+
+  get isGroupMember(): boolean {
+    return !!this.userData.apartmentId
+  }
+
+  get hasSplitWiseKey(): boolean {
+    return !!this.userData.meta?.splitwiseApiKey
+  }
+
+  get hasCanvasKey(): boolean {
+    return !!this.userData.meta?.canvasApiKey
   }
 
   login(email: string, password: string) {
@@ -83,11 +144,6 @@ export class BackendService {
     this.userData = {} as UserData;
     this.groupData = {} as Apartment;
   }
-
-  isGroupMember() {
-
-  }
-
 
   createApartment(value: string) {
     return this.http.post<Apartment>(APT_CREATE, {
@@ -172,6 +228,8 @@ export class BackendService {
     this.socketUser.complete()
     this.socketGroup.complete()
     this.isConnected = false;
+    console.log('Clearing local storage')
+    localStorage.clear()
     this.snack.open('You have been logged out', 'OK', {duration: 3000});
   }
 
@@ -180,7 +238,7 @@ export class BackendService {
       splitwiseApiKey: splitwiseApiKey,
       canvasApiKey: canvasApiKey,
     }
-    this.sendToUserSocket("update", this.userData)
+    this.sendToUserSocket("keys-update", this.userData)
   }
 
   updateInfo(firstName: string | undefined, lastName: string | undefined) {
@@ -242,8 +300,7 @@ export class BackendService {
 
   private handleError(err: any) {
     console.log("User socket error", err)
-    this.snack.open('You have been logged out', 'OK', {duration: 3000});
-    this.isConnected = false;
+    this.disconnect()
   }
 
   private sendToUserSocket(type: string, user: UserData) {

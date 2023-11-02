@@ -17,12 +17,5 @@ export class ExpensesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get("https://secure.splitwise.com/api/v3.0/get_friends.json", {
-      headers: {
-        "Authorization": "Bearer " + this.backend.userData.meta?.splitwiseApiKey,
-      }
-    }).subscribe((data: any) => {
-      this.friends = data.friends;
-    })
   }
 }

@@ -18,7 +18,7 @@ import {LoginComponent} from './components/login/login.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {SettingsComponent} from './components/settings/settings.component';
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BackendService} from "./services/backend.service";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
@@ -31,6 +31,13 @@ import {MatCardModule} from "@angular/material/card";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {ConfirmDialogComponent} from "./components/dialogs/confirm.dialog.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {CalendarModule, DateAdapter} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+
 
 @NgModule({
   declarations: [
@@ -64,7 +71,13 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatChipsModule,
     MatCardModule,
     MatTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
+    FormsModule,
+    MatButtonToggleModule,
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     BackendService,

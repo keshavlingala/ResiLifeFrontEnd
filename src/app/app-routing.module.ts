@@ -8,15 +8,16 @@ import {NotesComponent} from "./components/notes/notes.component";
 import {EventsComponent} from "./components/events/events.component";
 import {LoginComponent} from "./components/login/login.component";
 import {SettingsComponent} from "./components/settings/settings.component";
+import {authGuard} from "./services/auth.guard";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'expenses', component: ExpensesComponent},
-  {path: 'assignments', component: AssigmentsComponent},
-  {path: 'calendar', component: CalendarComponent},
-  {path: 'notes', component: NotesComponent},
-  {path: 'events', component: EventsComponent},
-  {path: 'settings', component: SettingsComponent},
+  {path: 'expenses', component: ExpensesComponent, canActivate: [authGuard]},
+  {path: 'assignments', component: AssigmentsComponent, canActivate: [authGuard]},
+  {path: 'calendar', component: CalendarComponent, canActivate: [authGuard]},
+  {path: 'notes', component: NotesComponent, canActivate: [authGuard]},
+  {path: 'events', component: EventsComponent, canActivate: [authGuard]},
+  {path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
   {path: '', component: HomeComponent, pathMatch: 'full'},
 ];
 

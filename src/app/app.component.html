@@ -15,7 +15,7 @@
   </button>
 </mat-toolbar>
 <mat-drawer-container class="sidenav-container" autosize>
-  <mat-drawer #drawer class="sidenav" mode="side" opened>
+  <mat-drawer #drawer [opened]="backendService.isLoggedIn" class="sidenav" mode="side">
     <div class="column">
       <button [disabled]="!backendService.isLoggedIn" [routerLinkActiveOptions]="{ exact: true }"
               routerLinkActive="active" routerLink="/" mat-raised-button>
@@ -57,6 +57,10 @@
   <button *ngIf="backendService.isLoggedIn" mat-menu-item>
     <mat-icon>help</mat-icon>
     <span>Help</span>
+  </button>
+  <button (click)="refreshThings()" *ngIf="backendService.isLoggedIn" mat-menu-item>
+    <mat-icon>refresh</mat-icon>
+    <span>Reload</span>
   </button>
   <button *ngIf="!backendService.isLoggedIn" routerLink="login" mat-menu-item>
     <mat-icon>login</mat-icon>

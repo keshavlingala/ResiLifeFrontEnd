@@ -34,5 +34,9 @@ export class AppComponent implements AfterViewInit {
       this.backendService.connect()
     }
   }
+
+  refreshThings() {
+    this.backendService.getMemberDetails()
+  }
 }
 

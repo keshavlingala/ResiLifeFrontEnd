@@ -16,7 +16,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.backendService.groupData.payload.memberDetails) {
+    if (!this.backendService.isLoggedIn) {
+      this.router.navigate(['/login'])
+    }
+    if (!this.backendService.groupData.payload?.memberDetails) {
       this.backendService.getMemberDetails()
     }
   }

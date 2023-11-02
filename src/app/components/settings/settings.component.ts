@@ -35,8 +35,8 @@ export class SettingsComponent {
     const {firstName, lastName} = this.userInfoGroup.value
     this.backendService.updateInfo(firstName || undefined, lastName || undefined)
   }
-}
 
+}
 
 //Keys
 // Splitwise: n1IVZ3S5O8oVRTKmVebzLbnMaTyUZGESHqPyyHpW

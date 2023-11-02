@@ -1,1 +1,10 @@
-<p>assigments works!</p>
+<div *ngIf="backend.hasSplitWiseKey else noKey">
+  <p>assigments works!</p>
+</div>
+
+<ng-template #noKey>
+  <div class="d-flex justify-content-center flex-column align-items-center p-4">
+    <h3>You need have Canvas Key to use this feature</h3>
+    <button color="primary" mat-flat-button routerLink="/settings">Go to Settings</button>
+  </div>
+</ng-template>
