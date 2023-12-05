@@ -37,6 +37,7 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import {Ng2GoogleChartsModule} from "ng2-google-charts";
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import {MatNativeDateModule} from "@angular/material/core";
     MatButtonToggleModule,
     MatExpansionModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    Ng2GoogleChartsModule
   ],
   providers: [
     BackendService,

@@ -1,5 +1,62 @@
 <div *ngIf="backend.hasSplitWiseKey else noKey">
-  <pre>{{friends | json}}</pre>
+  <div class="d-flex flex-row justify-content-around p-4">
+    <div class="d-flex flex-column">
+      <h5>Recent Expenses</h5>
+      <ul class="d-flex flex-column gap-3 p-2">
+        <li *ngFor="let exp of expenses" class="d-flex flex-row align-items-center gap-3 p-3">
+          <div>
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="d-flex flex-column gap-2">
+            <b>{{exp.description}} - {{exp.category.name}}</b>
+            <mat-chip-listbox>
+              <mat-chip-option color="accent" selected>{{exp.cost | currency: 'USD'}}</mat-chip-option>
+            </mat-chip-listbox>
+            <div class="d-flex gap-1">
+              <div *ngFor="let user of exp.users">
+                <img (click)="changeSelected(user)" [matTooltip]="user.user.first_name+' '+user.user.last_name"
+                     [src]="getUserPic(user.user.picture)" alt="" width="50px">
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="d-flex flex-column">
+      <h5>Recent Payments</h5>
+      <ul class="d-flex flex-column gap-3 p-2">
+        <li *ngFor="let exp of payments" class="d-flex flex-row align-items-center gap-3 p-3">
+          <div>
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="d-flex flex-column gap-2">
+            <b>{{exp.description}} - {{exp.category.name}}</b>
+            <mat-chip-listbox>
+              <mat-chip-option color="accent" selected>{{exp.cost | currency: 'USD'}}</mat-chip-option>
+            </mat-chip-listbox>
+            <div class="d-flex gap-3">
+              <div *ngIf="getPayer(exp) as payer">
+                <img (click)="changeSelected(payer)" [matTooltip]="payer.user.first_name+' '+payer.user.last_name"
+                     [src]="getUserPic(payer.user.picture)" alt="" width="50px">
+              </div>
+              <div class="d-flex flex-column justify-content-center align-items-center">
+                <mat-icon>arrow_forward</mat-icon>
+                {{exp.cost | currency: 'USD'}}
+              </div>
+              <div *ngIf="getpayee(exp) as payee">
+                <img (click)="changeSelected(payee)" [matTooltip]="payee.user.first_name+' '+payee.user.last_name"
+                     [src]="getUserPic(payee.user.picture)" alt="" width="50px">
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="d-flex flex-column gap-2 p-2">
+      <google-chart [data]="pieChart"></google-chart>
+      <google-chart [data]="barChart"></google-chart>
+    </div>
+  </div>
 </div>
 <ng-template #noKey>
   <div class="d-flex justify-content-center flex-column align-items-center p-4">

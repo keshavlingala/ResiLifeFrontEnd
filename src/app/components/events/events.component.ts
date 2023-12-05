@@ -21,6 +21,9 @@ export class EventsComponent {
     private backendService: BackendService,
   ) {
     this.events = this.backendService.events
+    this.backendService.getCalendarEvents().subscribe(events => {
+    })
+    console.log(this)
   }
 
   addEvent() {

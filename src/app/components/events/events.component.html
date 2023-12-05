@@ -15,7 +15,6 @@
         <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
-
         <mat-error *ngIf="newEvent.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="newEvent.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
@@ -41,6 +40,8 @@
       </mat-expansion-panel-header>
       <p>Start Time: {{event.start | date}}</p>
       <p>End Time: {{event.end | date}}</p>
+      <div [innerHTML]="event.meta">
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

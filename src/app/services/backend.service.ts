@@ -4,21 +4,19 @@ import {
   APARTMENT_URL,
   APT_CREATE,
   APT_JOIN,
-  blue,
+  ASSIGNMENTS_URL,
+  EXPENSES_URL,
   GROUP_SOCKET_URL,
   LOGIN_URL,
-  red,
   REGISTER_URL,
   USER_DATA,
-  USER_SOCKET_URL,
-  yellow
+  USER_SOCKET_URL
 } from "../misc/constants";
 import {BehaviorSubject, map} from "rxjs";
-import {Apartment, Note, UserData} from "../misc/types";
+import {Apartment, CanvasCalendarEvent, Note, SplitwiseExpenseItem, UserData} from "../misc/types";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import {addDays, addHours, endOfMonth, startOfDay, subDays} from "date-fns";
 import {CalendarEvent} from "angular-calendar";
 
 @Injectable({
@@ -32,43 +30,7 @@ export class BackendService {
   socketUser!: WebSocketSubject<{ type: string, data: UserData }>;
   socketGroup!: WebSocketSubject<{ type: string, data: Apartment }>;
   isConnected = false;
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: {...(red)},
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: {...(yellow)},
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: {...(blue)},
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: {...(yellow)},
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ]
+  events: CalendarEvent[] = []
 
   constructor(
     private http: HttpClient,
@@ -296,6 +258,39 @@ export class BackendService {
       type: "get-members",
       data: this.groupData
     })
+  }
+
+  getExpenses(): any {
+    // return from(import('../../assets/sampleexpense.json')).pipe(
+    //   map((data: any) => {
+    //     return data.default as any[]
+    //   })
+    // )
+    return this.http.get<{ expenses: SplitwiseExpenseItem[] }>(EXPENSES_URL).pipe(
+      map(data => {
+        return data.expenses
+      })
+    )
+  }
+
+  getCalendarEvents() {
+    return this.http.get<CanvasCalendarEvent[]>(ASSIGNMENTS_URL).pipe(
+      map((data) => {
+        data.forEach(evnt => {
+          this.events.find(e => {
+            return e.id === evnt.id
+          }) || this.events.push({
+            id: evnt.id,
+            allDay: evnt.all_day,
+            start: new Date(evnt.all_day_date),
+            end: new Date(evnt.all_day_date),
+            title: evnt.title,
+            meta: evnt.description,
+          })
+        })
+        return data
+      })
+    )
   }
 
   private handleError(err: any) {

@@ -6,7 +6,8 @@ export const LOGIN_URL = `${BASE_URL}/auth/token`;
 export const REGISTER_URL = `${BASE_URL}/auth/signup`;
 
 export const USER_DATA = `${BASE_URL}/user/me`;
-
+export const EXPENSES_URL = `${BASE_URL}/user/expenses`;
+export const ASSIGNMENTS_URL = `${BASE_URL}/user/assignments`;
 export const APARTMENT_URL = `${BASE_URL}/apt`;
 export const APT_CREATE = `${APARTMENT_URL}/create`;
 export const APT_JOIN = `${APARTMENT_URL}/join`;

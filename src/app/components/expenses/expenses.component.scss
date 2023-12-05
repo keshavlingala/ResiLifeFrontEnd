@@ -1,0 +1,12 @@
+//Remove default styles
+ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+li {
+  padding: 5px;
+  margin: 0;
+  border: 1px solid #ccc;
+  box-shadow: 0px 2px 3px 0px #7d7575;
+}
