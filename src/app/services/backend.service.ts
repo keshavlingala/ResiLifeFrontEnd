@@ -31,6 +31,7 @@ export class BackendService {
   socketGroup!: WebSocketSubject<{ type: string, data: Apartment }>;
   isConnected = false;
   events: CalendarEvent[] = []
+  dataChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private http: HttpClient,
@@ -65,6 +66,10 @@ export class BackendService {
 
   get hasCanvasKey(): boolean {
     return !!this.userData.meta?.canvasApiKey
+  }
+
+  get onChanges() {
+    return this.dataChanged.asObservable()
   }
 
   login(email: string, password: string) {
@@ -241,6 +246,29 @@ export class BackendService {
     })
   }
 
+  sendMessageToApartment(message: string) {
+    if (!this.isConnected) {
+      this.snack.open('You must be Online', 'OK', {duration: 3000});
+      return
+    }
+    if (!this.groupData.payload.chatMessages) {
+      this.groupData.payload.chatMessages = []
+    }
+    this.groupData.payload.chatMessages.push({
+      message,
+      sender: {
+        firstName: this.userData.firstName,
+        lastName: this.userData.lastName,
+        email: this.userData.email,
+      },
+      timestamp: new Date(),
+    })
+    this.socketGroup.next({
+      type: "update",
+      data: this.groupData
+    })
+  }
+
   deleteNoteFromApartment(note: Note) {
     if (!this.isConnected) {
       this.snack.open('You must be Online', 'OK', {duration: 3000});
@@ -315,6 +343,7 @@ export class BackendService {
       this.groupData = groupData;
       localStorage.setItem('apartment', JSON.stringify(groupData));
     }
+    this.dataChanged.next(true)
   }
 }
 

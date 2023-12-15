@@ -32,6 +32,7 @@ export interface Payload {
   owner: string;
   notes: Note[];
   memberDetails?: MemberDetails[];
+  chatMessages?: ChatMessage[];
   // expenses?: Expense[];
 }
 
@@ -87,4 +88,15 @@ export interface CanvasCalendarEvent {
   assignment: {
     due_at: string;
   }
+}
+
+
+export interface ChatMessage {
+  message: string;
+  sender: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  timestamp: Date;
 }

@@ -1,0 +1,24 @@
+<div #scrollMe class="p-3 scroll-fix">
+  <div class="d-flex flex-column gap-2">
+    <mat-card class="p-2" *ngFor="let msg of backendService.groupData.payload.chatMessages">
+      <mat-card-header>
+        <img mat-card-avatar [src]="getPic(msg.sender)" alt="">
+        <mat-card-title>{{msg.sender.firstName + ' ' + msg.sender.lastName}}</mat-card-title>
+        <mat-card-subtitle>{{msg.message}}</mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+    <span #span></span>
+  </div>
+</div>
+<div class="chatInput">
+  <div [formGroup]="formGroup" class="p-3 d-flex justify-content-center">
+    <mat-form-field class="w-75" appearance="outline" color="accent">
+      <mat-label>Chat with Roommates</mat-label>
+      <input (keyup.enter)="sendMessage()" formControlName="chat" type="text" matInput
+             placeholder="Send a Message to Group">
+      <mat-error>Message cannot be empty</mat-error>
+      <mat-icon (click)="sendMessage()" matSuffix>send</mat-icon>
+    </mat-form-field>
+  </div>
+</div>
+

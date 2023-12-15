@@ -8,6 +8,7 @@ import {EventsComponent} from "./components/events/events.component";
 import {LoginComponent} from "./components/login/login.component";
 import {SettingsComponent} from "./components/settings/settings.component";
 import {authGuard} from "./services/auth.guard";
+import {ChatComponent} from "./components/chat/chat.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'notes', component: NotesComponent, canActivate: [authGuard]},
   {path: 'events', component: EventsComponent, canActivate: [authGuard]},
   {path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
+  {path: 'chat', component: ChatComponent, canActivate: [authGuard]},
   {path: '', component: HomeComponent, pathMatch: 'full'},
 ];
 
